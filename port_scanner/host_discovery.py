@@ -1,56 +1,51 @@
-import ipaddress
+import ipaddress, subprocess, sys
+
+ip_addr = sys.argv[1]
+ip_class = sys.argv[2].upper()
 
 try:
 
-    target = input("enter your ip: ")
+  ip = ipaddress.ip_address(ip_addr)
 
-    ip = ipaddress.ip_address(target)
-    first = int(target.split(".")[0])
+except:
 
-    if first >= 0 and first <= 127:
+  print("invalid ip")
+  exit()
 
-      print("Class A")
+if ip_class == "A":
 
-      if target == "1.0.0.1":
+  network = ipaddress.ip_network(ip_addr + "/8", strict=False) 
+  #strict=False use for calulate network add
 
-        print("this is getway ip")
+elif ip_class == "B":
 
-    elif first >= 128 and first <= 191:
+  network = ipaddress.ip_network(ip_addr + "/16", strict=False)
 
-      print("Class B")
+elif ip_class == "C":
 
-      if target == "128.0.0.1":
+  network = ipaddress.ip_network(ip_addr + "/24", strict=False)
 
-        print("this is getway ip")
+else:
 
-    elif first >= 192 and first <= 223 :
+  print("invalid class")
+  exit()
 
-      print("Class C")
+print("network address: ", network)
+print("checking hosts...\n")
 
-      if target == "192.0.0.1":
-      
-          print("this is getway ip")
+for host in network.hosts(): # get individual host
 
-    elif first >= 224 and first <= 239 :
+  result = subprocess.run(
+    ["ping", "-c", "1", "-W", "1", str(host)],# it's like run ping -c 1 -W 1 ip
+    stdout = subprocess.DEVNULL, # ping display a lot info so i hides by using this 
+    stderr = subprocess.DEVNULL  # hides error output
+  )
 
-      print("Class D")
+  if result.returncode == 0: # if returncode = 0 it is mean ping succeeded
 
-      if target == "224.0.0.1":
-      
-          print("this is getway ip")
+    print(host, "up")
 
-    else:
+  else:
 
-      print("Class E")
-
-      if target == "240.0.0.1":
-      
-          print("this is getway ip")
-
-except ValueError :
-
-   print("enter only a ip ")
-
-
-
+    print(host, "down")
 
