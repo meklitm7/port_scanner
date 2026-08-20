@@ -1,6 +1,5 @@
 import ipaddress
 
-
 try:
 
     target = input("enter your ip: ")
