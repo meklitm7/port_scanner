@@ -16,3 +16,16 @@ This project contains Python and Bash tools developed.
 - Nmap
 - Python `socket`, `ipaddress`, `subprocess`, `threading`, and `queue` modules
 - Nmap NSE
+  
+## Requirements
+
+### Kali Linux
+
+These tools were developed and tested on **Kali Linux**. Kali Linux is recommended because Nmap, Bash, and the required networking tools are already available.
+
+### Python Nmap Scanner
+
+The Nmap-based Python scanner requires the `python-nmap` module:
+
+```bash
+pip3 install python-nmap
